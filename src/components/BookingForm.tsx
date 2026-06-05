@@ -2,37 +2,30 @@
 
 import { useState } from 'react';
 
-type BookingFormProps = {
-  onSubmit?: (data: {
-    name: string;
-    email: string;
-    phone: string;
-    notes: string;
-  }) => void;
+type ClientInfo = {
+  name: string;
+  email: string;
+  phone: string;
+  notes: string;
 };
 
-export default function BookingForm({ onSubmit }: BookingFormProps) {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    notes: '',
-  });
+type BookingFormProps = {
+  clientInfo: ClientInfo;
+  setClientInfo: React.Dispatch<React.SetStateAction<ClientInfo>>;
+  onSubmit: (e: React.FormEvent) => void;
+  selectedSlot?: string | null;
+};
 
+export default function BookingForm({ clientInfo, setClientInfo, onSubmit }: BookingFormProps) {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { id, value } = e.target;
-    setFormData((prev) => ({ ...prev, [id]: value }));
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (onSubmit) onSubmit(formData);
+    setClientInfo((prev) => ({ ...prev, [id]: value }));
   };
 
   return (
     <div className="bg-surface-container-lowest rounded-lg shadow-md p-md border border-surface-container-high">
       <h3 className="font-headline-md text-headline-md text-primary mb-md">Client Details</h3>
-      <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+      <form className="flex flex-col gap-4" onSubmit={onSubmit}>
         {/* Full Name */}
         <div className="flex flex-col gap-xs">
           <label htmlFor="name" className="font-label-md text-label-md text-on-surface-variant">
@@ -42,7 +35,7 @@ export default function BookingForm({ onSubmit }: BookingFormProps) {
             id="name"
             type="text"
             placeholder="John Doe"
-            value={formData.name}
+            value={clientInfo.name}
             onChange={handleChange}
             className="w-full bg-surface border border-outline-variant rounded-lg p-3 font-body-md text-body-md text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-all placeholder:text-outline"
             required
@@ -58,7 +51,7 @@ export default function BookingForm({ onSubmit }: BookingFormProps) {
               id="email"
               type="email"
               placeholder="john@example.com"
-              value={formData.email}
+              value={clientInfo.email}
               onChange={handleChange}
               className="w-full bg-surface border border-outline-variant rounded-lg p-3 font-body-md text-body-md text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-all placeholder:text-outline"
               required
@@ -72,7 +65,7 @@ export default function BookingForm({ onSubmit }: BookingFormProps) {
               id="phone"
               type="tel"
               placeholder="(555) 000-0000"
-              value={formData.phone}
+              value={clientInfo.phone}
               onChange={handleChange}
               className="w-full bg-surface border border-outline-variant rounded-lg p-3 font-body-md text-body-md text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-all placeholder:text-outline"
             />
@@ -87,7 +80,7 @@ export default function BookingForm({ onSubmit }: BookingFormProps) {
             id="notes"
             rows={3}
             placeholder="Brief description of your tattoo idea, placement, and size..."
-            value={formData.notes}
+            value={clientInfo.notes}
             onChange={handleChange}
             className="w-full bg-surface border border-outline-variant rounded-lg p-3 font-body-md text-body-md text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-all resize-none placeholder:text-outline"
           />
