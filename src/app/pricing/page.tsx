@@ -1,9 +1,11 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import Navbar from '@/components/Navbar';
 import { supabase } from '@/lib/supabase';
 import { useRouter } from 'next/navigation';
+import Card from '@/components/ui/Card';
+import Button from '@/components/ui/Button';
+import Badge from '@/components/ui/Badge';
 
 export default function PricingPage() {
   const router = useRouter();
@@ -37,48 +39,89 @@ export default function PricingPage() {
   };
 
   return (
-    <>
-      <Navbar />
-      <main className="flex flex-col items-center justify-center min-h-screen bg-background p-6">
-        <h1 className="text-display-lg font-display-lg text-primary mb-8">Choose Your Plan</h1>
-        <div className="grid gap-8 sm:grid-cols-2 max-w-4xl w-full">
-          {/* Free Tier */}
-          <div className="bg-surface-container-lowest rounded-xl shadow-md border border-outline-variant p-6 flex flex-col">
-            <h2 className="text-headline-md font-headline-md text-primary mb-4">Free</h2>
-            <p className="text-body-md text-on-surface-variant mb-4">$0 / month</p>
-            <ul className="flex-1 mb-6 space-y-2 text-body-md text-on-surface-variant">
-              <li>✓ 5 appointments per month</li>
-              <li>✓ Basic support</li>
-            </ul>
-            <button
-              disabled={isPro === false && isPro !== null}
-              className={`w-full py-3 rounded-lg font-label-md text-label-md uppercase tracking-[0.1em] font-black 
-                ${isPro ? 'bg-secondary-container text-on-secondary-container' : 'bg-surface-container-low text-on-surface-variant'}
-                hover:${isPro ? 'bg-secondary' : 'bg-surface-container'} transition-colors`}
-            >
-              {isPro ? 'Current Plan' : 'Free Tier'}
-            </button>
+    <div className="flex flex-col items-center py-20 px-6">
+      <div className="text-center mb-16">
+        <h1 className="text-4xl md:text-5xl font-black text-foreground tracking-tight mb-4 drop-shadow-sm">
+          Simple, Transparent <span className="text-gold-500">Pricing</span>
+        </h1>
+        <p className="text-muted text-lg max-w-xl mx-auto">
+          Choose the plan that best fits your studio's needs. Upgrade anytime to unlock unlimited potential.
+        </p>
+      </div>
+
+      <div className="grid gap-8 md:grid-cols-2 max-w-5xl w-full">
+        {/* Free Tier */}
+        <Card className="flex flex-col relative overflow-hidden group">
+          <div className="absolute top-0 left-0 w-full h-1 bg-surface-border transition-colors group-hover:bg-muted" />
+          <div className="mb-8">
+            <h2 className="text-2xl font-bold text-foreground mb-2">Essential</h2>
+            <div className="flex items-baseline gap-2 mb-4">
+              <span className="text-4xl font-black text-foreground">$0</span>
+              <span className="text-muted font-medium">/ month</span>
+            </div>
+            <p className="text-muted text-sm">Perfect for artists just starting out.</p>
           </div>
-          {/* Pro Tier */}
-          <div className="bg-surface-container-lowest rounded-xl shadow-md border border-outline-variant p-6 flex flex-col">
-            <h2 className="text-headline-md font-headline-md text-primary mb-4">Pro</h2>
-            <p className="text-body-md text-on-surface-variant mb-4">
-              $19 / month <span className="text-sm text-on-surface-variant">or $149 / year</span>
-            </p>
-            <ul className="flex-1 mb-6 space-y-2 text-body-md text-on-surface-variant">
-              <li>✓ Unlimited appointments</li>
-              <li>✓ Priority support</li>
-              <li>✓ Gold badge on profile</li>
-            </ul>
-            <button
+          
+          <ul className="flex-1 mb-10 space-y-4">
+            {['5 appointments per month', 'Basic calendar management', 'Email support'].map((feature, i) => (
+              <li key={i} className="flex items-center gap-3 text-foreground/80 font-medium">
+                <span className="text-muted material-symbols-outlined text-sm">check_circle</span>
+                {feature}
+              </li>
+            ))}
+          </ul>
+          
+          <Button
+            variant="secondary"
+            disabled={true}
+            className="w-full"
+          >
+            {isPro ? 'Current Plan' : 'Free Tier (Included)'}
+          </Button>
+        </Card>
+
+        {/* Pro Tier */}
+        <Card className="flex flex-col relative border-gold-500/30 shadow-[0_0_40px_rgba(212,175,55,0.05)]">
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-gold-500 to-gold-600" />
+          <div className="absolute top-6 right-6">
+            <Badge variant="gold">Most Popular</Badge>
+          </div>
+          
+          <div className="mb-8">
+            <h2 className="text-2xl font-bold text-foreground mb-2">Pro Artist</h2>
+            <div className="flex items-baseline gap-2 mb-4">
+              <span className="text-4xl font-black text-foreground">$19</span>
+              <span className="text-muted font-medium">/ month</span>
+            </div>
+            <p className="text-muted text-sm">Everything you need to run a busy studio.</p>
+          </div>
+          
+          <ul className="flex-1 mb-10 space-y-4">
+            {['Unlimited appointments', 'Priority automated booking', 'Gold verified badge', '24/7 Priority support'].map((feature, i) => (
+              <li key={i} className="flex items-center gap-3 text-foreground font-medium">
+                <span className="text-gold-500 material-symbols-outlined text-sm drop-shadow-[0_0_8px_rgba(212,175,55,0.8)]">check_circle</span>
+                {feature}
+              </li>
+            ))}
+          </ul>
+          
+          <div className="flex flex-col gap-3 mt-auto">
+            <Button
+              variant="primary"
               onClick={() => startCheckout('monthly')}
-              className="w-full py-3 rounded-lg bg-[#d4af37] text-primary font-label-md text-label-md uppercase tracking-[0.1em] font-black hover:opacity-90 transition-colors shadow-md hover:shadow-lg"
+              className="w-full"
             >
               Upgrade to Pro
+            </Button>
+            <button 
+              onClick={() => startCheckout('yearly')}
+              className="text-xs text-muted hover:text-gold-500 font-medium tracking-wide transition-colors uppercase"
+            >
+              Or pay $149 yearly (Save 35%)
             </button>
           </div>
-        </div>
-      </main>
-    </>
+        </Card>
+      </div>
+    </div>
   );
 }

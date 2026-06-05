@@ -1,10 +1,10 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import Navbar from '@/components/Navbar';
 import Calendar from '@/components/Calendar';
 import AvailabilitySlots from '@/components/AvailabilitySlots';
 import BookingForm from '@/components/BookingForm';
+import Button from '@/components/ui/Button';
 import { useRouter } from 'next/navigation';
 
 export default function BookPage() {
@@ -15,7 +15,6 @@ export default function BookPage() {
   const [availableSlots, setAvailableSlots] = useState<string[]>([]);
 
   useEffect(() => {
-    // Fetch available slots for the selected date
     const fetchSlots = async () => {
       try {
         const res = await fetch(`/api/availability?date=${selectedDate.toISOString().split('T')[0]}`);
@@ -49,46 +48,43 @@ export default function BookPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
-      <Navbar />
-      <main className="flex-1 max-w-7xl mx-auto p-margin-mobile md:p-margin-desktop py-lg">
-        <h1 className="text-headline-lg mobile:text-headline-lg md:text-headline-lg text-primary mb-lg">
-          Book an Appointment
-        </h1>
-        <div className="grid lg:grid-cols-2 gap-lg">
-          {/* Left column: Calendar + Form */}
-          <div className="flex flex-col gap-lg">
-            <div className="bg-surface-container-lowest rounded-lg shadow-md p-md border border-surface-container-high">
-              <Calendar selectedDate={selectedDate} onDateChange={setSelectedDate} />
-            </div>
-            <div className="bg-surface-container-lowest rounded-lg shadow-md p-md border border-surface-container-high">
-              <BookingForm
-                clientInfo={clientInfo}
-                setClientInfo={setClientInfo}
-                onSubmit={handleSubmit}
-                selectedSlot={selectedSlot}
-              />
-            </div>
+    <div className="min-h-screen bg-background flex flex-col items-center py-12 px-4 md:px-12">
+      <h1 className="text-4xl md:text-5xl font-black text-foreground mb-10">
+        Book an Appointment
+      </h1>
+      <div className="grid lg:grid-cols-2 gap-12 w-full max-w-7xl">
+        {/* Left column: Calendar and Form */}
+        <div className="flex flex-col gap-8">
+          <div className="bg-surface-container-lowest rounded-2xl shadow-md p-6 border border-surface-border">
+            <Calendar selectedDate={selectedDate} onDateChange={setSelectedDate} />
           </div>
-          {/* Right column: Time slots */}
-          <div className="flex flex-col gap-lg h-full">
-            <AvailabilitySlots
-              slots={availableSlots}
+          <div className="bg-surface-container-lowest rounded-2xl shadow-md p-6 border border-surface-border">
+            <BookingForm
+              clientInfo={clientInfo}
+              setClientInfo={setClientInfo}
+              onSubmit={handleSubmit}
               selectedSlot={selectedSlot}
-              onSelect={setSelectedSlot}
             />
-            <button
-              type="button"
-              onClick={handleSubmit}
-              disabled={!selectedSlot || !clientInfo.name}
-              className="w-full py-4 rounded-lg bg-secondary-container text-on-secondary-container font-label-md uppercase tracking-[0.1em] font-black hover:bg-secondary-fixed transition-colors shadow-md hover:shadow-lg flex items-center justify-center gap-2 disabled:opacity-50"
-            >
-              Submit Booking
-              <span className="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
-            </button>
           </div>
         </div>
-      </main>
+        {/* Right column: Time slots */}
+        <div className="flex flex-col gap-8 h-full">
+          <AvailabilitySlots
+            slots={availableSlots}
+            selectedSlot={selectedSlot}
+            onSelect={setSelectedSlot}
+          />
+          <Button
+            onClick={handleSubmit}
+            variant="primary"
+            size="lg"
+            disabled={!selectedSlot || !clientInfo.name}
+            className="w-full"
+          >
+            Submit Booking
+          </Button>
+        </div>
+      </div>
     </div>
   );
 }

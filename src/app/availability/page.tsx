@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import Navbar from '@/components/Navbar';
+import Card from '@/components/ui/Card';
+import Button from '@/components/ui/Button';
 import Calendar from '@/components/Calendar';
 import AvailabilitySlots from '@/components/AvailabilitySlots';
 
@@ -38,31 +39,34 @@ export default function AvailabilityPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
-      <Navbar />
-      <main className="flex-1 max-w-7xl mx-auto p-margin-mobile md:p-margin-desktop py-lg">
-        <h1 className="text-headline-lg mobile:text-headline-lg md:text-headline-lg text-primary mb-lg">
-          Manage Availability
-        </h1>
-        <div className="grid lg:grid-cols-2 gap-lg">
-          <div className="bg-surface-container-lowest rounded-lg shadow-md p-md border border-surface-container-high">
-            <Calendar selectedDate={selectedDate} onDateChange={setSelectedDate} />
-          </div>
-          <div className="flex flex-col gap-lg">
-            <AvailabilitySlots
-              slots={availableSlots}
-              selectedSlot={null}
-              onSelect={() => {}}
-            />
-            <button
-              onClick={handleSave}
-              className="w-full py-4 rounded-lg bg-secondary-container text-on-secondary-container font-label-md uppercase tracking-[0.1em] font-black hover:bg-secondary-fixed transition-colors shadow-md hover:shadow-lg flex items-center justify-center gap-2"
-            >
-              Save Availability
-            </button>
-          </div>
+    <div className="min-h-screen bg-background flex flex-col items-center py-12 px-4 md:px-12">
+      <Card className="w-full max-w-7xl mb-8">
+        <div className="p-6 border-b border-surface-border flex justify-between items-center">
+          <h1 className="text-4xl font-black text-foreground">Manage Availability</h1>
         </div>
-      </main>
+        <Card className="p-6">
+          <div className="grid lg:grid-cols-2 gap-8">
+            <div className="bg-surface-container-lowest rounded-2xl shadow-md p-6 border border-surface-border">
+              <Calendar selectedDate={selectedDate} onDateChange={setSelectedDate} />
+            </div>
+            <div className="flex flex-col gap-6">
+              <AvailabilitySlots
+                slots={availableSlots}
+                selectedSlot={null}
+                onSelect={() => {}}
+              />
+              <Button
+                onClick={handleSave}
+                variant="primary"
+                size="lg"
+                className="w-full"
+              >
+                Save Availability
+              </Button>
+            </div>
+          </div>
+        </Card>
+      </Card>
     </div>
   );
 }

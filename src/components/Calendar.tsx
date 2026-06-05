@@ -11,12 +11,12 @@ type CalendarProps = {
 
 export default function Calendar({ selectedDate, onDateChange }: CalendarProps) {
   return (
-    <div className="w-full flex justify-center">
+    <div className="w-full flex justify-center custom-calendar-wrapper">
       <ReactCalendar
         onChange={(val) => onDateChange(val as Date)}
         value={selectedDate}
         minDate={new Date()}
-        className="rounded-lg border-none shadow-sm p-2 w-full max-w-full"
+        className="w-full max-w-full"
       />
     </div>
   );

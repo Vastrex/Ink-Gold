@@ -14,9 +14,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="scroll-smooth">
-      <body className="bg-background text-on-background min-h-screen flex flex-col antialiased">
+      <body className="bg-background text-foreground min-h-screen flex flex-col selection:bg-gold-500/30">
         <Navbar />
-        <main className="flex-grow w-full max-w-7xl mx-auto px-margin-mobile md:px-margin-desktop py-lg">
+        <main className="flex-grow w-full flex flex-col">
           {children}
         </main>
       </body>

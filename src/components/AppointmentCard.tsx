@@ -1,4 +1,5 @@
 import React from 'react';
+import Card from '@/components/ui/Card';
 
 type AppointmentCardProps = {
   time: string; // e.g. "10:00 AM - 1:00 PM"
@@ -14,20 +15,20 @@ export default function AppointmentCard({
   status,
 }: AppointmentCardProps) {
   // Determine colors based on status (using design palette)
-  const statusColors: Record<string, {bg:string; text:string; border?:string}> = {
-    Confirmed: {bg: 'bg-secondary-container', text: 'text-on-secondary-container'},
-    Consultation: {bg: 'bg-surface-variant', text: 'text-on-surface-variant', border: 'border-outline-variant'},
-    Cancelled: {bg: 'bg-error-container', text: 'text-on-error'},
-    Pending: {bg: 'bg-primary-container', text: 'text-on-primary'},
+  const statusColors: Record<string, { bg: string; text: string; border?: string }> = {
+    Confirmed: { bg: 'bg-secondary-container', text: 'text-on-secondary-container' },
+    Consultation: { bg: 'bg-surface-variant', text: 'text-on-surface-variant', border: 'border-outline-variant' },
+    Cancelled: { bg: 'bg-error-container', text: 'text-on-error' },
+    Pending: { bg: 'bg-primary-container', text: 'text-on-primary' },
   };
-  const colors = statusColors[status] || statusColors['Confirmed'];
+  const colors = statusColors[status] ?? statusColors['Confirmed'];
 
   return (
-    <div className="group border border-outline-variant rounded-lg p-4 hover:border-primary hover:shadow-md transition-all cursor-pointer relative overflow-hidden">
+    <Card className="relative overflow-hidden group hover:shadow-lg transition-shadow">
       {/* Left accent line */}
-      <div className="absolute left-0 top-0 bottom-0 w-1 bg-secondary-container"></div>
+      <div className="absolute left-0 top-0 bottom-0 w-1 bg-secondary-container" />
       <div className="flex justify-between items-start mb-2">
-        <div className="flex items-center gap-2 text-primary font-label-md text-label-md">
+        <div className="flex items-center gap-2 text-primary font-label-md">
           <span className="material-symbols-outlined text-sm">schedule</span>
           {time}
         </div>
@@ -38,6 +39,6 @@ export default function AppointmentCard({
         <span className="material-symbols-outlined text-sm opacity-70">draw</span>
         {tattooStyle}
       </p>
-    </div>
+    </Card>
   );
 }
