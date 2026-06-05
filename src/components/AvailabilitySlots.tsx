@@ -2,19 +2,31 @@
 
 import React, { useState } from 'react';
 
-export default function AvailabilitySlots() {
-  const [selected, setSelected] = useState<string | null>(null);
+type AvailabilitySlotsProps = {
+  slots?: string[];
+  selectedSlot?: string | null;
+  onSelect?: (slot: string) => void;
+};
+
+export default function AvailabilitySlots({ slots, selectedSlot, onSelect }: AvailabilitySlotsProps) {
+  const [localSelected, setLocalSelected] = useState<string | null>(null);
+
+  const currentSelected = selectedSlot !== undefined ? selectedSlot : localSelected;
+  const handleSelect = (time: string) => {
+    if (onSelect) onSelect(time);
+    else setLocalSelected(time);
+  };
 
   const renderSlot = (time: string, disabled = false, booked = false) => (
     <button
       key={time}
-      onClick={() => !disabled && !booked && setSelected(time)}
+      onClick={() => !disabled && !booked && handleSelect(time)}
       disabled={disabled || booked}
       className={`py-3 px-2 rounded-lg font-body-md text-body-md transition-all
         ${booked ? 'text-outline line-through bg-surface-container-low cursor-not-allowed' : ''}
         ${disabled ? 'text-outline cursor-not-allowed' : ''}
         ${!disabled && !booked ? 'text-on-surface hover:border-primary-container hover:bg-surface-container' : ''}
-        ${selected === time ? 'border-2 border-primary-container bg-primary-container text-on-primary font-bold shadow-md scale-105' : ''}
+        ${currentSelected === time ? 'border-2 border-primary-container bg-primary-container text-on-primary font-bold shadow-md scale-105' : ''}
         ${!disabled && !booked ? 'border border-outline-variant' : ''}`}
     >
       {time}
@@ -62,14 +74,14 @@ export default function AvailabilitySlots() {
           <div className="flex flex-col">
             <span className="font-label-sm text-label-sm text-on-surface-variant uppercase">Selected Slot</span>
             <span className="font-body-md text-body-md font-bold text-primary">
-              {selected ? `Oct 9, ${selected}` : 'None'}
+              {currentSelected ? `Oct 9, ${currentSelected}` : 'None'}
             </span>
           </div>
           <span className="material-symbols-outlined text-secondary-container">schedule</span>
         </div>
         <button
           className="w-full py-4 rounded-lg bg-secondary-container text-on-secondary-container font-label-md text-label-md uppercase tracking-[0.1em] font-black hover:bg-secondary-fixed transition-colors shadow-md hover:shadow-lg flex items-center justify-center gap-2 group"
-          disabled={!selected}
+          disabled={!currentSelected}
         >
           Submit Booking
           <span className="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
